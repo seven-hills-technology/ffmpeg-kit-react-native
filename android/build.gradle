@@ -10,6 +10,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 
 static def safePackageName(String packageName) {
   packageName.replace("-lts", "")
