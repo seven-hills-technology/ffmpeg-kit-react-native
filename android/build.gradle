@@ -52,14 +52,17 @@ android {
     sourceCompatibility JavaVersion.VERSION_11
     targetCompatibility JavaVersion.VERSION_11
   }
+
+  sourceSets {
+    main {
+      jniLibs.srcDirs = ['libs']
+    }
+  }
 }
 
 repositories {
   mavenCentral()
   google()
-  flatDir {
-    dirs 'libs'
-  }
 
   def found = false
   def defaultDir = null
@@ -127,11 +130,19 @@ repositories {
   }
 }
 
+/*rootProject.allprojects { Project subproject ->
+  subproject.repositories {
+    flatDir {
+      dirs project(':ffmpeg-kit-react-native').file('libs'), 'libs'
+    }
+  }
+}*/
+
 dependencies {
   api 'com.facebook.react:react-native:+'
   //implementation 'com.arthenica:ffmpeg-kit-' + safePackageName(safeExtGet('ffmpegKitPackage', 'https')) + ':' + safePackageVersion(safeExtGet('ffmpegKitPackage', 'https'))
   implementation fileTree(include: ['*.jar'], dir: 'libs')
-  implementation(name: 'ffmpeg-kit-https-6.0-2', ext: 'aar')
+  implementation (files("libs/ffmpeg-kit-https-6.0-2.aar"))
 }
 
 /*tasks.register("buildFFmpegKit") {
