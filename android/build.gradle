@@ -124,10 +124,31 @@ repositories {
   }
 }
 
+task sourceJar(type: Jar) {
+  from android.sourceSets.main.java.srcDirs
+  archiveClassifier.set('sources')
+}
+
 dependencies {
   api 'com.facebook.react:react-native:+'
   //implementation 'com.arthenica:ffmpeg-kit-' + safePackageName(safeExtGet('ffmpegKitPackage', 'https')) + ':' + safePackageVersion(safeExtGet('ffmpegKitPackage', 'https'))
-  implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+  implementation fileTree(include: ['*.jar'], dir: 'libs')
+}
+
+afterEvaluate {
+  publishing {
+    publications {
+      ffmpegKitPub(MavenPublication) {
+        groupId = 'com.arthenica.ffmpegkit'
+        artifactId = 'ffmpeg-kit'
+        version = '6.0-2'
+
+        // Include the AAR file as an artifact
+        artifact("$rootDir/node_modules/ffmpeg-kit-react-native/android/libs/ffmpeg-kit-https-6.0-2.aar")
+        artifact(sourceJar)
+      }
+    }
+  }
 }
 
 /*tasks.register("buildFFmpegKit") {
