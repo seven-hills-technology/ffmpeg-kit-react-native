@@ -9,7 +9,7 @@ const withCustomRootBuildGradle = (config) => {
 allprojects {
 	repositories {
 		flatDir {
-				dirs project(':ffmpeg-kit-react-native').projectDir.absolutePath + '/libs'
+			dirs project(':ffmpeg-kit-react-native').projectDir.absolutePath + '/libs'
 		}
 	}
 }
