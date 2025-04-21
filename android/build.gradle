@@ -52,12 +52,6 @@ android {
     sourceCompatibility JavaVersion.VERSION_11
     targetCompatibility JavaVersion.VERSION_11
   }
-
-  /*sourceSets {
-    main {
-      jniLibs.srcDirs = ['libs']
-    }
-  }*/
 }
 
 repositories {
@@ -127,14 +121,6 @@ repositories {
       "${project.name}: unable to locate React Native android sources. " +
         "Ensure you have you installed React Native as a dependency in your project and try again."
     )
-  }
-}
-
-rootProject.allprojects { Project subproject ->
-  subproject.repositories {
-    flatDir {
-      dirs project(':ffmpeg-kit-react-native').file('libs'), 'libs'
-    }
   }
 }
 
