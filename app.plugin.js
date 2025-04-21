@@ -6,14 +6,14 @@ const withCustomRootBuildGradle = (config) => {
 		const buildGradle = config.modResults.contents;
 		// Add flatDir for multiple local modules
 		const flatDirSnippet = `
-		allprojects {
-				repositories {
-						flatDir {
-								dirs project(':ffmpeg-kit-react-native').projectDir.absolutePath + '/libs'
-						}
-				}
+allprojects {
+	repositories {
+		flatDir {
+				dirs project(':ffmpeg-kit-react-native').projectDir.absolutePath + '/libs'
 		}
-		`;
+	}
+}
+`;
 
 		if (!buildGradle.includes(flatDirSnippet)) {
 			config.modResults.contents = buildGradle + flatDirSnippet;
