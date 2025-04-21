@@ -1,22 +1,39 @@
-const { withProjectBuildGradle, withPlugins } = require('@expo/config-plugins');
+const { withProjectBuildGradle, withAppBuildGradle } = require('@expo/config-plugins');
 
-module.exports = function withCustomAar(config) {
-	return withPlugins(config, [
-	  function(config) {
-		  return withProjectBuildGradle(config, config => {
-			if (!config.modResults.contents.includes('flatDir')) {
-			  config.modResults.contents = config.modResults.contents.replace(
-				/allprojects\s*{[^}]*repositories\s*{[^}]*}/,
-				match => {
-				  return match.replace(
-					/repositories\s*{/, 
-					`repositories {\n        flatDir {\n            dirs project(':ffmpeg-kit-react-native').file('repo')\n        }`
-				  );
+// This function will modify the root project build.gradle file
+const withCustomRootBuildGradle = (config) => {
+	return withProjectBuildGradle(config, (config) => {
+		const buildGradle = config.modResults.contents;
+		// Add flatDir for multiple local modules
+		const flatDirSnippet = `
+		allprojects {
+				repositories {
+						flatDir {
+								dirs project(':ffmpeg-kit-react-native').projectDir.absolutePath + '/libs'
+						}
 				}
-			  );
-			}
-			return config;
-		  });
-	  },
-	]);
-}
+		}
+		`;
+
+		if (!buildGradle.includes(flatDirSnippet)) {
+			config.modResults.contents = buildGradle + flatDirSnippet;
+		}
+		return config;
+	});
+};
+
+// Optionally, add a similar plugin to modify the app-level build.gradle if necessary
+const withCustomAppBuildGradle = (config) => {
+	return withAppBuildGradle(config, (config) => {
+		const appBuildGradle = config.modResults.contents;
+		// Optionally, add app-specific configurations here
+		return config;
+	});
+};
+
+// Combine the changes
+module.exports = (config) => {
+	config = withCustomRootBuildGradle(config); // Modify root build.gradle
+	config = withCustomAppBuildGradle(config);  // Optionally modify app build.gradle
+	return config;
+};
