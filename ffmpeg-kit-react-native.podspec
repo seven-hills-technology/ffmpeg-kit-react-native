@@ -16,14 +16,14 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/lufinkey/ffmpreg-kit-react-native.git", :tag => "main" }
 
-  s.default_subspec = 'https'
-
   s.dependency "React-Core"
 
   s.prepare_command = <<-CMD
     >&2 echo "performing prepare_command for pod"
     rm -rf ios/libs || exit $?
-    if grep -q 'ffmpeg-kit-react-native/https+x264' "$APP_PATH/ios/Podfile.lock"; then
+    podspec_json_path="$APP_PATH/ios/Pods/Local Podspecs/ffmpeg-kit-react-native.podspec.json"
+    
+    if grep -e '"subspecs"\s*:\s*\[.*?\{[^}]*?"name"\s*:\s*"https\+x264"[^}]*?\}.*?\]' "$podspec_json_path"; then
       unzip 'ios/ffmpeg-kit-ios-https+x264.zip' -d ios/libs || exit $?
     else
       unzip 'ios/ffmpeg-kit-ios-https.zip' -d ios/libs || exit $?
