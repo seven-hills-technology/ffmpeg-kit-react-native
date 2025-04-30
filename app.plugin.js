@@ -1,4 +1,10 @@
-const { withProjectBuildGradle, withAppBuildGradle, withPodfileProperties } = require('@expo/config-plugins');
+const {
+	withProjectBuildGradle,
+	withAppBuildGradle,
+	withPodfileProperties,
+	withDangerousMod
+} = require('@expo/config-plugins');
+const { mergeContents } = require('@expo/config-plugins/build/utils/generateCode');
 const path = require('path');
 
 // Modify the root project build.gradle file
