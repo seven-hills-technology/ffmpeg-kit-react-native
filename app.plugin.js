@@ -37,7 +37,7 @@ const withCustomAppBuildGradle = (config) => {
 const withCustomPodfile = (config, {variant}) => {
 	return withPodfile(config, (config) => {
 		if(variant) {
-			content = podfileContent.replace(
+			config.modResults.contents = config.modResults.contents.replace(
 				/pod ['"]ffmpeg-kit-react-native['"](\r\n|\r|\n)/,
 				`pod 'ffmpeg-kit-react-native', :subspecs => [${JSON.stringify(variant)}]\$1`
 			);
