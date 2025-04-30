@@ -20,8 +20,6 @@ Pod::Spec.new do |s|
 
   s.prepare_command = <<-CMD
     >&2 echo "performing prepare_command for pod"
-    ls -al
-    ls -al ios
     rm -rf 'ios/libs' || exit $?
     podspec_json_path="$APP_PATH/ios/Pods/Local Podspecs/ffmpeg-kit-react-native.podspec.json"
     if grep -q '"https+x264"' "$podspec_json_path"; then
@@ -35,7 +33,6 @@ Pod::Spec.new do |s|
 
   s.source_files = '**/FFmpegKitReactNativeModule.m',
           '**/FFmpegKitReactNativeModule.h'
-  s.preserve_paths = ['ios/*.{zip}']
   s.vendored_frameworks = "ios/libs/*.{xcframework}"
   s.ios.deployment_target = '12.1'
 

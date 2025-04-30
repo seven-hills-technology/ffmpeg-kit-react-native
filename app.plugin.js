@@ -50,7 +50,7 @@ const withCustomCocoaPodsImport = (config) => {
 			contents = mergeContents({
 				tag: `ffmpeg-kit-react-native-import`,
 				src: contents,
-				newSrc: `  pod 'ffmpeg-kit-react-native', :subspecs => podfile_properties['ffmpeg-kit-react-native.subspecs'] || [], :podspec => File.join(File.dirname(\`node --print "require.resolve('ffmpeg-kit-react-native/package.json')"\`), "ffmpeg-kit-react-native.podspec")`,
+				newSrc: `  pod 'ffmpeg-kit-react-native', :subspecs => podfile_properties['ffmpeg-kit-react-native.subspecs'] || [], :path => File.dirname(\`node --print "require.resolve('ffmpeg-kit-react-native/package.json')"\`)`,
 				anchor: /use_native_modules/,
 				// We can't go after the use_native_modules block because it might have parameters, causing it to be multi-line (see react-native template).
 				offset: 0,
