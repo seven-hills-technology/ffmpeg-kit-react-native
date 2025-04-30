@@ -1,5 +1,4 @@
 const { withProjectBuildGradle, withAppBuildGradle, withPodfileProperties } = require('@expo/config-plugins');
-const fs = require('fs');
 const path = require('path');
 
 // Modify the root project build.gradle file
