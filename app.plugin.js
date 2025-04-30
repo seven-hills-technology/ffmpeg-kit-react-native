@@ -1,4 +1,5 @@
 const { withProjectBuildGradle, withAppBuildGradle, withPodfileProperties } = require('@expo/config-plugins');
+const path = require('path');
 
 // Modify the root project build.gradle file
 const withCustomRootBuildGradle = (config) => {
@@ -32,15 +33,11 @@ const withCustomAppBuildGradle = (config) => {
 };
 
 // Add the custom import to the CocoaPods.
-export const withCustomCocoaPodsImport = (config) => {
+const withCustomCocoaPodsImport = (config) => {
 	return withDangerousMod(config, [
 		"ios",
 		async (config) => {
-			let file = config.modRequest.platformProjectRoot;
-			if(!file.endsWith('/')) {
-				file += '/';
-			}
-			file += 'Podfile';
+			const file = path.join(config.modRequest.platformProjectRoot, 'Podfile');
 
 			let contents = await promises.readFile(file, "utf8");
 			contents = mergeContents({
