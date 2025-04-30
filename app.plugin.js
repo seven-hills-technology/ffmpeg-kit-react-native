@@ -57,7 +57,7 @@ const withCustomCocoaPodsImport = (config) => {
 				comment: "#",
 			}).contents;
 
-			await fs.promises.writeFile(file, contents, "utf-8");
+			await fs.promises.writeFile(file, contents, "utf8");
 			return config;
 		},
 	]);
