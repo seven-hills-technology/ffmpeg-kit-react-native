@@ -5,6 +5,7 @@ const {
 	withDangerousMod
 } = require('@expo/config-plugins');
 const { mergeContents } = require('@expo/config-plugins/build/utils/generateCode');
+const fs = require('fs');
 const path = require('path');
 
 // Modify the root project build.gradle file
@@ -45,7 +46,7 @@ const withCustomCocoaPodsImport = (config) => {
 		async (config) => {
 			const file = path.join(config.modRequest.platformProjectRoot, 'Podfile');
 
-			let contents = await promises.readFile(file, "utf8");
+			let contents = await fs.promises.readFile(file, "utf8");
 			contents = mergeContents({
 				tag: `ffmpeg-kit-react-native-import`,
 				src: contents,
@@ -56,7 +57,7 @@ const withCustomCocoaPodsImport = (config) => {
 				comment: "#",
 			}).contents;
 
-			await promises.writeFile(file, contents, "utf-8");
+			await fs.promises.writeFile(file, contents, "utf-8");
 			return config;
 		},
 	]);
