@@ -35,6 +35,7 @@ Pod::Spec.new do |s|
 
   s.source_files = '**/FFmpegKitReactNativeModule.m',
           '**/FFmpegKitReactNativeModule.h'
+  s.preserve_paths = ['ios/*.{zip}']
   s.vendored_frameworks = "ios/libs/*.{xcframework}"
   s.ios.deployment_target = '12.1'
 
