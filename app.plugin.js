@@ -72,7 +72,7 @@ const withCustomPodfileProperties = (config, {variant}) => {
 module.exports = (config, options) => {
 	config = withCustomRootBuildGradle(config); // Modify root build.gradle
 	config = withCustomAppBuildGradle(config);  // Modify app build.gradle
-	if(options.variant) {
+	if(options?.variant) {
 		config = withCustomPodfileProperties(config, options); // Modify podfile
 		config = withCustomCocoaPodsImport(config); // Modify podfile
 	}
