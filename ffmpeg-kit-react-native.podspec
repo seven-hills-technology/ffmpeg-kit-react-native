@@ -21,10 +21,9 @@ Pod::Spec.new do |s|
   s.dependency "React-Core"
 
   s.prepare_command = <<-CMD
-    printenv
-    >&2 echo "performing prepare_command for pod ${POD_NAME}"
+    >&2 echo "performing prepare_command for pod"
     rm -rf ios/libs || exit $?
-    if grep -q 'ffmpeg-kit-react-native/https+x264' "${PODS_ROOT}/../Podfile.lock"; then
+    if grep -q 'ffmpeg-kit-react-native/https+x264' "$APP_PATH/ios/Podfile.lock"; then
       unzip 'ios/ffmpeg-kit-ios-https+x264.zip' -d ios/libs || exit $?
     else
       unzip 'ios/ffmpeg-kit-ios-https.zip' -d ios/libs || exit $?
