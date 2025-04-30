@@ -22,6 +22,8 @@ Pod::Spec.new do |s|
     >&2 echo "performing prepare_command for pod"
     rm -rf ios/libs || exit $?
     podspec_json_path="$APP_PATH/ios/Pods/Local Podspecs/ffmpeg-kit-react-native.podspec.json"
+    ls -al
+    ls -al ios
     if grep -q '"https+x264"' "$podspec_json_path"; then
       >&2 echo "unzipping https+x264 framework"
       unzip 'ios/ffmpeg-kit-ios-https+x264.zip' -d ios/libs || exit $?
