@@ -1,6 +1,8 @@
-const { withProjectBuildGradle, withAppBuildGradle } = require('@expo/config-plugins');
+const { withProjectBuildGradle, withAppBuildGradle, withPodfile } = require('@expo/config-plugins');
+const fs = require('fs');
+const path = require('path');
 
-// This function will modify the root project build.gradle file
+// Modify the root project build.gradle file
 const withCustomRootBuildGradle = (config) => {
 	return withProjectBuildGradle(config, (config) => {
 		const buildGradle = config.modResults.contents;
@@ -22,7 +24,7 @@ allprojects {
 	});
 };
 
-// Optionally, add a similar plugin to modify the app-level build.gradle if necessary
+// Modify the app-level build.gradle if necessary
 const withCustomAppBuildGradle = (config) => {
 	return withAppBuildGradle(config, (config) => {
 		const appBuildGradle = config.modResults.contents;
@@ -31,9 +33,23 @@ const withCustomAppBuildGradle = (config) => {
 	});
 };
 
+// Modify the podfile if necessary
+const withCustomPodfile = (config, {variant}) => {
+	return withPodfile(config, (config) => {
+		if(variant) {
+			content = podfileContent.replace(
+				/pod ['"]ffmpeg-kit-react-native['"](\r\n|\r|\n)/,
+				`pod 'ffmpeg-kit-react-native', :subspecs => [${JSON.stringify(variant)}]\$1`
+			);
+		}
+		return config;
+	});
+};
+
 // Combine the changes
-module.exports = (config) => {
+module.exports = (config, options) => {
 	config = withCustomRootBuildGradle(config); // Modify root build.gradle
-	config = withCustomAppBuildGradle(config);  // Optionally modify app build.gradle
+	config = withCustomAppBuildGradle(config);  // Modify app build.gradle
+	config = withCustomPodfile(config); // Modify podfile
 	return config;
 };
