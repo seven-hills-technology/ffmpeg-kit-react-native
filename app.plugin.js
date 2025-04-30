@@ -1,4 +1,4 @@
-const { withProjectBuildGradle, withAppBuildGradle, withPodfile } = require('@expo/config-plugins');
+const { withProjectBuildGradle, withAppBuildGradle, withPodfileProperties } = require('@expo/config-plugins');
 const fs = require('fs');
 const path = require('path');
 
@@ -33,15 +33,37 @@ const withCustomAppBuildGradle = (config) => {
 	});
 };
 
-// Modify the podfile if necessary
-const withCustomPodfile = (config, {variant}) => {
-	return withPodfile(config, (config) => {
-		if(variant) {
-			config.modResults.contents = config.modResults.contents.replace(
-				/pod ['"]ffmpeg-kit-react-native['"](\r\n|\r|\n)/,
-				`pod 'ffmpeg-kit-react-native', :subspecs => [${JSON.stringify(variant)}]\$1`
-			);
-		}
+// Add the custom import to the CocoaPods.
+export const withCustomCocoaPodsImport = (config) => {
+	return withDangerousMod(config, [
+		"ios",
+		async (config) => {
+			const file = path.join(config.modRequest.platformProjectRoot, "Podfile");
+
+			let contents = await promises.readFile(file, "utf8");
+			contents = mergeContents({
+				tag: `ffmpeg-kit-react-native-import`,
+				src: contents,
+				newSrc: `  pod 'ffmpeg-kit-react-native', :subspecs => podfile_properties['ffmpeg-kit-react-native.subspecs'] || [], :podspec => File.join(File.dirname(\`node --print "require.resolve('ffmpeg-kit-react-native/package.json')"\`), "ffmpeg-kit-react-native.podspec")`,
+				anchor: /use_native_modules/,
+				// We can't go after the use_native_modules block because it might have parameters, causing it to be multi-line (see react-native template).
+				offset: 0,
+				comment: "#",
+			}).contents;
+
+			await promises.writeFile(file, addCocoaPodsImport(contents), "utf-8");
+			return config;
+		},
+	]);
+};
+
+// Set the custom variant as a podfile property
+const withCustomPodfileProperties = (config, {variant}) => {
+	return withPodfileProperties(config, (config) => {
+		// @ts-ignore: wrong type
+		config.modResults["ffmpeg-kit-react-native.subspecs"] = [
+			variant,
+		].filter(Boolean);
 		return config;
 	});
 };
@@ -50,6 +72,9 @@ const withCustomPodfile = (config, {variant}) => {
 module.exports = (config, options) => {
 	config = withCustomRootBuildGradle(config); // Modify root build.gradle
 	config = withCustomAppBuildGradle(config);  // Modify app build.gradle
-	config = withCustomPodfile(config); // Modify podfile
+	if(options.variant) {
+		config = withCustomPodfileProperties(config, options); // Modify podfile
+		config = withCustomCocoaPodsImport(config); // Modify podfile
+	}
 	return config;
 };
