@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
 
   s.prepare_command = <<-CMD
     >&2 echo "performing prepare_command for pod"
-    rm -rf ios/libs || exit $?
+    #rm -rf 'ios/libs' || exit $?
     podspec_json_path="$APP_PATH/ios/Pods/Local Podspecs/ffmpeg-kit-react-native.podspec.json"
     ls -al
     ls -al ios
