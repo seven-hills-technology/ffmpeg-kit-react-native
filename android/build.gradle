@@ -1,14 +1,3 @@
-buildscript {
-  repositories {
-    google()
-    mavenCentral()
-  }
-
-  dependencies {
-    classpath 'com.android.tools.build:gradle:8.1.0'
-  }
-}
-
 apply plugin: 'com.android.library'
 
 static def safePackageName(String packageName) {
@@ -30,12 +19,12 @@ android {
     namespace 'com.arthenica.ffmpegkit.reactnative'
   }
 
-  compileSdkVersion 35
+  compileSdkVersion 36
   ndkVersion rootProject.ext.ndkVersion
 
   defaultConfig {
     minSdkVersion safeExtGet('ffmpegKitPackage', 'https').contains("-lts") ? 16 : 24
-    targetSdkVersion 35
+    targetSdkVersion 36
     versionCode 602
     versionName "6.0.2"
   }
